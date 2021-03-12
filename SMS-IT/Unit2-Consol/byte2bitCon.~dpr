@@ -1,0 +1,26 @@
+program byte2bitCon;
+
+{$APPTYPE CONSOLE}
+
+uses
+  SysUtils;
+
+const maskBitArray:array[0..7] of byte = (1,2,4,8,16,32,64,128);
+var n0, nn, NoB, nnByte:byte;
+
+begin
+  {  онсольный вариант подсчета установленных бит в байте
+  максимально оптимальный по быстродействию }
+  write ('¬ведите число от 0 до 255:');
+  readln(nnByte);
+  nn:=0;
+  NoB:=0;
+  for n0:=0 to 7 do
+    if (nnByte-nn) div maskBitArray[7-n0] >= 1 then
+      begin
+        nn:=nn+maskBitArray[7-n0];
+        inc(NoB);
+      end;
+  write(' оличество бит в числе '+IntToStr(nnByte)+' составл€ет '+IntToStr(NoB));
+  readln;
+end.
