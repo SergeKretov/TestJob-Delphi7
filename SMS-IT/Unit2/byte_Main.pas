@@ -1,0 +1,114 @@
+unit byte_Main;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls;
+
+type
+  TmainForm = class(TForm)
+    Label4ask: TLabel;
+    byteTXTvalue: TEdit;
+    byteBits: TLabel;
+    LabelBitsInfo: TLabel;
+    LabelNOB: TLabel;
+    LabelInfo: TLabel;
+    ButtonCloseForm: TButton;
+    procedure byteTXTvalueChange(Sender: TObject);
+    procedure errorMessage;
+    procedure byte2bit(inputValue:byte);
+    procedure ShowResult;
+    procedure ButtonCloseFormClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    byteValue, numberOfBits:byte;
+    bitArray:array[0..7] of byte;
+  end;
+
+var
+  mainForm: TmainForm;
+
+implementation
+
+{$R *.dfm}
+
+{Процедура отоброжения результата вычислений}
+procedure TmainForm.ShowResult;
+var n0:byte;
+begin
+{Очищаем метку с битовым представлением числа}
+  bytebits.Caption:='';
+{В цикле считываем результат битового представления числа и присваиваем метке}
+  for n0:=0 to 7 do
+    bytebits.Caption:=bytebits.Caption+IntToStr(bitArray[n0]);
+{Присваиваем метке значение КОЛИЧЕСТВО БИТ}
+  LabelNOB.Caption:=IntToStr(numberOfBits);
+end;
+
+{Процедура превода байта в битовое представление и подсчет битов
+входной параметр - значение байта 0-255}
+procedure TmainForm.byte2bit(inputValue:byte);
+{Определяем маску для перевода байта в битовое представление,
+такой подход исключает необходимость множественности условий и
+позволят произвести преобразование байта в биты (двоичную систему)
+за один проход в цикле}
+const maskBitArray:array[0..7] of byte = (1,2,4,8,16,32,64,128);
+var n0, nn:byte;
+begin
+  nn:=0;
+  numberOfBits:=0;
+  for n0:=0 to 7 do
+    begin
+      if (inputValue-nn) div maskBitArray[7-n0] >= 1 then
+        begin
+          bitArray[7-n0]:=1;
+          nn:=nn+maskBitArray[7-n0];
+          inc(numberOfBits); {Инкримент переменной подсчета количества битов}
+        end else
+          bitArray[7-n0]:=0;
+    end;
+end;
+
+{Процедура вывода сообщения об ошибке. Выведена в отдельную процедуру так как
+вызывается не однократно в процессе проверки}
+procedure TmainForm.errorMessage();
+begin
+  ShowMessage('Значение должно быть числовым и не превышать 255!');
+  byteTXTvalue.Text:=IntToStr(byteValue);
+end;
+
+{Процедура отслеживает на событии ввода данных (изменении) и производит расчет}
+procedure TmainForm.byteTXTvalueChange(Sender: TObject);
+var tempValue:integer;
+begin
+  if Length(byteTXTvalue.Text)>0 then            {если текстовое поле не пустое}
+    try                                          {пытаемся преоброзовать текст в число исключая ошибку ввода}
+      tempValue:=StrToInt(byteTXTvalue.Text);
+      if tempValue>255 then errorMessage else    {проверяем значение введенного числа на превышение допустимого}
+        begin
+          byteValue:=tempValue;                  {если все в порядке, производим расчет и выводим результат}
+          byte2bit(byteValue);
+          ShowResult;
+        end;
+    except                                       {иначе сообщение об ошибке}
+      errorMessage;
+    end else
+      begin                                      {если поле ввода очищено - устанавливаем 0 значения}
+        bytebits.Caption:='00000000';
+        LabelNOB.Caption:='0';
+      end;
+end;
+
+procedure TmainForm.ButtonCloseFormClick(Sender: TObject);
+begin
+  Close;                                         {закрываем форму}
+end;
+
+{При вводе значения числа можно было реализовать алгоритм исключения ошибок ввода,
+т.е. исключить возможность ввода символов отличных от числовых и в случае превышения
+вводимого числа устанавливать в значение 255, но это бы "утяжелило" код.}
+
+end.
