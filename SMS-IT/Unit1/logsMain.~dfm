@@ -80,20 +80,5 @@ object FormMain: TFormMain
       ParentFont = False
       TabOrder = 3
     end
-    object StaticTextLifeTime: TStaticText
-      Left = 8
-      Top = 56
-      Width = 108
-      Height = 20
-      BorderStyle = sbsSingle
-      Caption = 'StaticTextLogFile'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -13
-      Font.Name = 'MS Sans Serif'
-      Font.Style = []
-      ParentFont = False
-      TabOrder = 4
-    end
   end
 end

@@ -14,7 +14,6 @@ type
     BitBtn2: TBitBtn;
     StaticTextLogFile: TStaticText;
     StaticTextNoTh: TStaticText;
-    StaticTextLifeTime: TStaticText;
     procedure BitBtn1Click(Sender: TObject);
     procedure BitBtn2Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -46,7 +45,6 @@ begin
   FormSetting.ReadSetting;
   StaticTextLogFile.Caption:='Файл записи логов: '+FormSetting.logSet.logFileName;
   StaticTextNoTh.Caption:='Количество потоков: '+IntToStr(FormSetting.logSet.numberOfThread);
-  StaticTextLifeTime.Caption:='Время жизни записи в лог (сек.): '+IntToStr(FormSetting.logSet.OldClearTime);
 end;
 
 end.

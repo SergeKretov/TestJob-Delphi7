@@ -2,14 +2,14 @@ program logs;
 
 uses
   Forms,
-  logsMain in 'logsMain.pas' {FormMain},
+  logsMain in 'logsMain.pas' {Form1},
   logsSetting in 'logsSetting.pas' {FormSetting};
 
 {$R *.res}
 
 begin
   Application.Initialize;
-  Application.CreateForm(TFormMain, FormMain);
+  Application.CreateForm(TForm1, Form1);
   Application.CreateForm(TFormSetting, FormSetting);
   Application.Run;
 end.
